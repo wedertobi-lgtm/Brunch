@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Unser Brunch 🥐</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf6ec; --warm: #f0dfc8; --brown: #8b5e3c;
+      --brown-light: #c49a6c; --brown-dark: #5c3d20;
+      --green: #7a9e7e; --text: #3a2a1a;
+    }
+    body {
+      background: linear-gradient(135deg, #fdf6ec 0%, #f5e6d0 100%);
+      font-family: 'Nunito', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .container { max-width: 600px; margin: 0 auto; }
+
+    header { text-align: center; margin-bottom: 2rem; }
+    .emoji-row { font-size: 2rem; margin-bottom: 0.4rem; cursor: default; user-select: none; }
+    h1 { font-family: 'Lora', serif; font-size: 2.2rem; color: var(--brown-dark); }
+    .subtitle { color: var(--brown-light); margin-top: 0.4rem; font-size: 1rem; }
+
+    .card {
+      background: #fff9f2;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(90,60,20,0.10);
+      padding: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .card-title {
+      font-family: 'Lora', serif; font-size: 1.15rem;
+      color: var(--brown-dark); margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .badge {
+      margin-left: auto; background: var(--warm);
+      color: var(--brown); border-radius: 20px;
+      padding: 0.1rem 0.6rem; font-size: 0.85rem; font-weight: 700;
+    }
+
+    .form-group { margin-bottom: 0.9rem; }
+    label {
+      display: block; font-size: 0.78rem; font-weight: 700;
+      color: var(--brown); margin-bottom: 0.3rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    input, select {
+      width: 100%; padding: 0.75rem 1rem;
+      border: 2px solid var(--warm); border-radius: 10px;
+      font-family: 'Nunito', sans-serif; font-size: 1rem;
+      color: var(--text); background: var(--cream);
+      outline: none; transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: var(--brown-light); }
+
+    .btn {
+      width: 100%; padding: 0.85rem; border: none; border-radius: 12px;
+      background: var(--brown); color: #fff;
+      font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; margin-top: 0.3rem;
+    }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+    .btn.success { background: var(--green); }
+
+    .gruppe { margin-bottom: 1rem; }
+    .gruppe-header {
+      border-left: 3px solid; padding-left: 0.6rem;
+      margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 700;
+    }
+    .eintrag {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.5rem 0.75rem; background: var(--cream);
+      border-radius: 8px; margin-bottom: 0.3rem;
+    }
+    .eintrag-name { font-weight: 700; margin-right: 0.5rem; color: var(--brown-dark); }
+    .eintrag-was { color: #7a6050; font-size: 0.95rem; }
+    .delete-btn {
+      background: none; border: none; color: #c0615a;
+      cursor: pointer; font-size: 0.85rem; padding: 0.2rem 0.4rem;
+      border-radius: 4px; flex-shrink: 0;
+    }
+
+    .hint { color: var(--brown-light); text-align: center; padding: 1rem 0; font-size: 0.95rem; }
+    .footer { text-align: center; color: var(--brown-light); font-size: 0.8rem; margin-top: 0.5rem; }
+    .spinner { text-align: center; padding: 1rem; font-size: 1.5rem; animation: spin 1s linear infinite; display: inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="emoji-row" id="titleTap">🥐 ☕ 🍓 🧀 🥂</div>
+    <h1>Unser Brunch</h1>
+    <p class="subtitle">Trag ein, was du mitbringst — damit wir alles haben! 🎉</p>
+  </header>
+
+  <div class="card">
+    <div class="card-title">✍️ Ich bringe mit…</div>
+    <div class="form-group">
+      <label>Dein Name</label>
+      <input id="inp-name" type="text" placeholder="z.B. Urs"/>
+    </div>
+    <div class="form-group">
+      <label>Was bringst du?</label>
+      <input id="inp-was" type="text" placeholder="z.B. Gipfeli vom Bäcker"/>
+    </div>
+    <div class="form-group">
+      <label>Kategorie</label>
+      <select id="inp-kat">
+        <option value="backwaren">🥐 Backwaren</option>
+        <option value="kase">🧀 Käse &amp; Aufschnitt</option>
+        <option value="salat">🥗 Salate &amp; Gemüse</option>
+        <option value="fruchte">🍓 Früchte</option>
+        <option value="warmes">🍳 Warmes</option>
+        <option value="getranke">🥂 Getränke</option>
+        <option value="susses">🍰 Süsses</option>
+        <option value="sonstiges">🎁 Sonstiges</option>
+      </select>
+    </div>
+    <button class="btn" id="btn-submit">Eintragen</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">
+      🧺 Was kommt alles
+      <span class="badge" id="badge">0</span>
+    </div>
+    <div id="liste"><div class="hint"><span class="spinner">⏳</span></div></div>
+  </div>
+
+  <p class="footer">🔄 Aktualisiert automatisch alle 10 Sekunden</p>
+</div>
+
+<script>
+  const API_KEY = '$2a$10$XxeNLRskqrOenrdbwfg5ouXKTCJBqF1qlcNIwCoOxPsVR6gyMtMQO';
+  const BIN_ID_KEY = 'brunch_bin_id';
+  const HEADERS = {
+    'Content-Type': 'application/json',
+    'X-Access-Key': API_KEY,
+    'X-Bin-Private': 'false'
+  };
+
+  const KATEGORIEN = [
+    { value: 'backwaren', label: '🥐 Backwaren', color: '#c8956c' },
+    { value: 'kase',      label: '🧀 Käse & Aufschnitt', color: '#d4a843' },
+    { value: 'salat',     label: '🥗 Salate & Gemüse', color: '#7a9e7e' },
+    { value: 'fruchte',   label: '🍓 Früchte', color: '#d4706a' },
+    { value: 'warmes',    label: '🍳 Warmes', color: '#c0784a' },
+    { value: 'getranke',  label: '🥂 Getränke', color: '#6a8fad' },
+    { value: 'susses',    label: '🍰 Süsses', color: '#b87ab0' },
+    { value: 'sonstiges', label: '🎁 Sonstiges', color: '#8a8a8a' },
+  ];
+
+  let binId = '69cc0f33aaba882197b079c1';
+  let eintraege = [];
+  let adminTap = 0;
+  let adminMode = false;
+
+  // --- JSONbin helpers ---
+  async function createBin() {
+    const res = await fetch('https://api.jsonbin.io/v3/b', {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({ eintraege: [] })
+    });
+    const data = await res.json();
+    binId = data.metadata.id;
+    localStorage.setItem(BIN_ID_KEY, binId);
+    return binId;
+  }
+
+  async function readBin() {
+    if (!binId) await createBin();
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+      headers: { 'X-Access-Key': API_KEY }
+    });
+    const data = await res.json();
+    return data.record.eintraege || [];
+  }
+
+  async function writeBin(liste) {
+    if (!binId) await createBin();
+    await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+      method: 'PUT',
+      headers: HEADERS,
+      body: JSON.stringify({ eintraege: liste })
+    });
+  }
+
+  // --- UI ---
+  function renderListe() {
+    const badge = document.getElementById('badge');
+    badge.textContent = eintraege.length;
+
+    const container = document.getElementById('liste');
+    if (eintraege.length === 0) {
+      container.innerHTML = '<p class="hint">Noch nichts eingetragen — sei der Erste! 🙌</p>';
+      return;
+    }
+
+    let html = '';
+    for (const kat of KATEGORIEN) {
+      const items = eintraege.filter(e => e.kat === kat.value);
+      if (!items.length) continue;
+      html += `<div class="gruppe">
+        <div class="gruppe-header" style="color:${kat.color};border-color:${kat.color}">${kat.label}</div>`;
+      for (const item of items) {
+        html += `<div class="eintrag">
+          <div>
+            <span class="eintrag-name">${escHtml(item.name)}</span>
+            <span class="eintrag-was">${escHtml(item.was)}</span>
+          </div>
+          ${adminMode ? `<button class="delete-btn" onclick="deleteItem('${item.id}')">✕</button>` : ''}
+        </div>`;
+      }
+      html += '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function load() {
+    try {
+      eintraege = await readBin();
+      renderListe();
+    } catch(e) {
+      document.getElementById('liste').innerHTML = '<p class="hint">⚠️ Fehler beim Laden.</p>';
+    }
+  }
+
+  async function deleteItem(id) {
+    eintraege = eintraege.filter(e => e.id !== id);
+    await writeBin(eintraege);
+    renderListe();
+  }
+
+  // --- Submit ---
+  document.getElementById('btn-submit').addEventListener('click', async () => {
+    const name = document.getElementById('inp-name').value.trim();
+    const was  = document.getElementById('inp-was').value.trim();
+    const kat  = document.getElementById('inp-kat').value;
+    if (!name || !was) return;
+
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Speichern…';
+
+    try {
+      const neuer = { id: Math.random().toString(36).slice(2,10), name, was, kat };
+      eintraege = [...eintraege, neuer];
+      await writeBin(eintraege);
+      renderListe();
+      document.getElementById('inp-was').value = '';
+      btn.classList.add('success');
+      btn.textContent = '✓ Eingetragen!';
+      setTimeout(() => {
+        btn.classList.remove('success');
+        btn.textContent = 'Eintragen';
+        btn.disabled = false;
+      }, 2000);
+    } catch(e) {
+      alert('Fehler beim Speichern.');
+      btn.textContent = 'Eintragen';
+      btn.disabled = false;
+    }
+  });
+
+  // Enter-Taste
+  document.getElementById('inp-was').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btn-submit').click();
+  });
+
+  // Admin-Modus: Emoji-Zeile 5x tippen
+  document.getElementById('titleTap').addEventListener('click', () => {
+    adminTap++;
+    if (adminTap >= 5) { adminMode = !adminMode; adminTap = 0; renderListe(); }
+  });
+
+  // Init + Auto-Refresh
+  load();
+  setInterval(load, 10000);
+</script>
+</body>
+</html>
